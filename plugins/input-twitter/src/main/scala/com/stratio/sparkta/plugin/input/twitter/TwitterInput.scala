@@ -45,13 +45,13 @@ class TwitterInput(properties: Map[String, JSerializable]) extends Input(propert
   override def setUp(ssc: StreamingContext): DStream[Event] = {
     val stream=TwitterUtils.createStream(ssc, None, trends)
 
-    stream.map(data => new Event(Map("status" -> data.asInstanceOf[java.io.Serializable],
-      "wordsN" -> data.getText.split(" ").size,
-      "timestamp" ->  data.getCreatedAt,
-      "geolocation" -> (data.getGeoLocation match {
+    stream.map(data => new Event(Map("status" -> Array(data),
+      "wordsN" -> data.getText.split(" ").toArray,
+      "timestamp" ->  Array(data.getCreatedAt),
+      "geolocation" -> Array(data.getGeoLocation match {
         case null => None
-        case _ => Some((data.getGeoLocation.getLatitude + "__" + data.getGeoLocation.getLongitude))
-      }).asInstanceOf[JSerializable]
+        case _ => Some((data.getGeoLocation.getLatitude , data.getGeoLocation.getLongitude))
+      })
     )))
   }
 }

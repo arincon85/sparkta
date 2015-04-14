@@ -17,6 +17,8 @@ package com.stratio.sparkta.aggregator
 
 import java.io.{Serializable => JSerializable}
 
+import org.apache.spark.sql.Row
+
 import com.stratio.sparkta.sdk._
 import org.apache.spark.streaming.StreamingContext._
 import org.apache.spark.streaming.dstream.DStream
@@ -44,11 +46,11 @@ case class Rollup(components: Seq[(Dimension, BucketType)], operators: Seq[Opera
     m1 ++ m2.map { case (k, v) => k -> (v + m1.getOrElse(k, 0L))}
 
 
-  def aggregate(dimensionValuesStream: DStream[(Seq[DimensionValue], Map[String, JSerializable])])
+  def aggregate(dimensionValuesStream: DStream[(Seq[DimensionValue], Map[String, Row])])
   : DStream[UpdateMetricOperation] = {
     //TODO catch errors and null elements control
 
-    val filteredDimensionsDstream: DStream[(Seq[DimensionValue], Map[String, JSerializable])] =
+    val filteredDimensionsDstream: DStream[(Seq[DimensionValue], Map[String, Row])] =
       dimensionValuesStream
         .map(dimensions => {
         val dimVals: Seq[DimensionValue] = dimensions._1

@@ -17,6 +17,8 @@ package com.stratio.sparkta.plugin.operator.count
 
 import java.io.{Serializable => JSerializable}
 
+import org.apache.spark.sql.Row
+
 import com.stratio.sparkta.sdk._
 
 import scala.util.Try
@@ -27,11 +29,11 @@ class CountOperator(properties: Map[String, JSerializable]) extends Operator(pro
 
   override val writeOperation = WriteOp.Inc
 
-  override def processMap(inputFields: Map[String, JSerializable]) = {
+  override def processMap(inputFields: Map[String, Row  ]):Option[Long] = {
     CountOperator.SOME_ONE
   }
 
-  override def processReduce(values : Iterable[Option[_>:AnyVal]]) =
+  override def processReduce(values : Iterable[Option[_>:AnyVal]]) :Option[Long] =
     Try(Some(values.map(_.get.asInstanceOf[Number].longValue()).reduce(_ + _)))
       .getOrElse(Some(0L))
 }

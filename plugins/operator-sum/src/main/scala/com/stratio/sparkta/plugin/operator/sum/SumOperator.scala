@@ -16,6 +16,8 @@
 package com.stratio.sparkta.plugin.operator.sum
 
 import java.io.{Serializable => JSerializable}
+import org.apache.spark.sql.Row
+
 import com.stratio.sparkta.sdk._
 import com.stratio.sparkta.sdk.ValidatingPropertyMap._
 
@@ -29,13 +31,13 @@ class SumOperator(properties: Map[String, JSerializable]) extends Operator(prope
 
   override val writeOperation = WriteOp.Inc
 
-  override def processMap(inputFields: Map[String, JSerializable]) =
+  override def processMap(inputFields: Map[String, Row]) :Option[Number]=
     inputFields.contains(inputField) match {
       case false => Some(0L)
       case true => Some(inputFields.get(inputField).get.asInstanceOf[Number])
     }
 
-  override def processReduce(values : Iterable[Option[_>:AnyVal]]) = {
+  override def processReduce(values : Iterable[Option[_>:AnyVal]]):Option[Long] = {
     Try(Some(values.map(_.get.asInstanceOf[Number].longValue()).reduce(_ + _)))
       .getOrElse(Some(0L))
   }

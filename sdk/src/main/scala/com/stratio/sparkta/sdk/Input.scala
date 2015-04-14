@@ -31,5 +31,6 @@ abstract class Input(properties: Map[String, Serializable]) extends Parameteriza
 object Input {
   //TODO it´s ok?
   val RAW_DATA_KEY = "_attachment_body"
+  val SEPARATOR =","
 }
 

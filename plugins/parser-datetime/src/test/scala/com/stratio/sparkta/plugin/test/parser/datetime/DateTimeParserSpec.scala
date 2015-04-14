@@ -27,33 +27,33 @@ class DateTimeParserSpec extends WordSpecLike {
 
   "A DateTimeParser" should {
     "parse unixMillis" in {
-      val e1 = new Event(Map("ts" -> 1416330788000L))
-      val e2 = new Event(Map("ts" -> new Date(1416330788000L)))
+      val e1 = new Event(Map("ts" -> Array(1416330788000L).asInstanceOf[Array[Any]]))
+      val e2 = new Event(Map("ts" -> Array(new Date(1416330788000L)).asInstanceOf[Array[Any]]))
       assertResult(e2)(new DateTimeParser(Map("ts" -> "unixMillis")).parse(e1))
     }
     "parse unixMillis string" in {
-      val e1 = new Event(Map("ts" -> "1416330788000"))
-      val e2 = new Event(Map("ts" -> new Date(1416330788000L)))
+      val e1 = new Event(Map("ts" -> Array("1416330788000").asInstanceOf[Array[Any]]))
+      val e2 = new Event(Map("ts" -> Array(new Date(1416330788000L)).asInstanceOf[Array[Any]]))
       assertResult(e2)(new DateTimeParser(Map("ts" -> "unixMillis")).parse(e1))
     }
     "parse unix" in {
-      val e1 = new Event(Map("ts" -> "1416330788"))
-      val e2 = new Event(Map("ts" -> new Date(1416330788000L)))
+      val e1 = new Event(Map("ts" -> Array("1416330788").asInstanceOf[Array[Any]]))
+      val e2 = new Event(Map("ts" -> Array(new Date(1416330788000L)).asInstanceOf[Array[Any]]))
       println(new Date(1416330788L))
       assertResult(e2)(new DateTimeParser(Map("ts" -> "unix")).parse(e1))
     }
     "parse unix string" in {
-      val e1 = new Event(Map("ts" -> "1416330788"))
-      val e2 = new Event(Map("ts" -> new Date(1416330788000L)))
+      val e1 = new Event(Map("ts" -> Array("1416330788").asInstanceOf[Array[Any]]))
+      val e2 = new Event(Map("ts" -> Array(new Date(1416330788000L)).asInstanceOf[Array[Any]]))
       assertResult(e2)(new DateTimeParser(Map("ts" -> "unix")).parse(e1))
     }
     "parse dateTime" in {
-      val e1 = new Event(Map("ts" -> "2014-05-23T21:22:23.250Z"))
-      val e2 = new Event(Map("ts" -> new DateTime(ISOChronology.getInstanceUTC)
+      val e1 = new Event(Map("ts" ->Array( "2014-05-23T21:22:23.250Z").asInstanceOf[Array[Any]]))
+      val e2 = new Event(Map("ts" ->Array( new DateTime(ISOChronology.getInstanceUTC)
         .withYear(2014).withMonthOfYear(5).withDayOfMonth(23)
         .withHourOfDay(21).withMinuteOfHour(22).withSecondOfMinute(23).withMillisOfSecond(250)
-        .toDate
-      ))
+        .toDate).asInstanceOf[Array[Any]])
+      )
       assertResult(e2)(new DateTimeParser(Map("ts" -> "dateTime")).parse(e1))
     }
   }

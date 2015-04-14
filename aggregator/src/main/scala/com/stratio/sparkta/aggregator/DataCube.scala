@@ -15,6 +15,8 @@
  */
 package com.stratio.sparkta.aggregator
 
+import org.apache.spark.sql.Row
+
 import com.stratio.sparkta.sdk._
 import org.apache.spark.streaming.dstream.DStream
 import java.io.{Serializable => JSerializable}
@@ -24,14 +26,14 @@ case class DataCube(dimensions: Seq[Dimension], rollups: Seq[Rollup]) {
   def setUp(inputStream: DStream[Event]): Seq[DStream[UpdateMetricOperation]] = {
 
     //TODO: add event values
-    val extractedDimensionsStream: DStream[(Seq[DimensionValue], Map[String, JSerializable])] = inputStream
+    val extractedDimensionsStream: DStream[(Seq[DimensionValue], Map[String, Row])] = inputStream
       .map((e: Event) => {
         val dimVals = for {
           dimension: Dimension <- dimensions
-          value <- e.keyMap.get(dimension.name).toSeq
+          value <- e.keyRowMap.get(dimension.name).toSeq
           (bucketType, bucketedValue) <- dimension.bucketer.bucket(value)
         } yield DimensionValue(dimension, bucketType, bucketedValue)
-        (dimVals, e.keyMap)
+        (dimVals, e.keyRowMap)
       })
       .cache()
     // Create rollups

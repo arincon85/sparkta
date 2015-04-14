@@ -36,7 +36,7 @@ class MorphlinesParser(properties: Map[String, Serializable]) extends Parser(pro
     data.keyMap.foreach(e => {
       if (Input.RAW_DATA_KEY.equals(e._1)) {
         //TODO: This actually needs getting raw bytes from the origin
-        val result = e._2 match {
+        val result = e._2(0) match {
           case s: String => new ByteArrayInputStream(s.getBytes("UTF-8"))
           case b: Array[Byte] => new ByteArrayInputStream(b)
         }
@@ -78,10 +78,10 @@ case class MorphlineImpl(config : String) {
   private def toEvent(record: Record): Event = {
     val map = record.getFields.asMap().asScala.map(m => {
       //Getting only the first element
-      (m._1, m._2.asScala.headOption match {
-        case Some(e) => e.asInstanceOf[Serializable]
+      (m._1, Array(m._2.asScala.headOption match {
+        case Some(e) => e
         case None => null
-      })
+      }).asInstanceOf[Array[Any]])
     }).toMap
     new Event(map)
   }

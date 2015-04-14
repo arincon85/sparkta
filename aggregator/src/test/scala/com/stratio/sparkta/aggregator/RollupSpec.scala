@@ -15,6 +15,8 @@
  */
 package com.stratio.sparkta.aggregator
 
+import org.apache.spark.sql.Row
+
 import com.stratio.sparkta.plugin.bucketer.passthrough.PassthroughBucketer
 import com.stratio.sparkta.plugin.operator.count.CountOperator
 import com.stratio.sparkta.plugin.operator.sum.SumOperator
@@ -26,14 +28,10 @@ class RollupSpec extends TestSuiteBase {
 
   test("aggregate") {
     val bucketer = new PassthroughBucketer
-    val input : Seq[Seq[(Seq[DimensionValue], Map[String,JSerializable])]] = Seq(Seq(
+    val input : Seq[Seq[(Seq[DimensionValue], Map[String,Row])]] = Seq(Seq(
       (Seq(DimensionValue(Dimension("foo", bucketer), new BucketType("identity"), "bar")),
-        Map[String,JSerializable]("n" -> 4)),
-      (Seq(DimensionValue(Dimension("foo", bucketer), new BucketType("identity"), "bar")),
-        Map[String,JSerializable]("n" -> 3)),
-      (Seq(DimensionValue(Dimension("foo", bucketer), new BucketType("identity"), "foo")),
-        Map[String,JSerializable]("n" -> 2))
-    ))
+        Map[String,Row]("n" -> Row (Array(4)))
+        )))
     val rollup = new Rollup(
       Seq(Dimension("foo", bucketer) -> new BucketType("identity")),
       Seq(new CountOperator(Map()), new SumOperator(Map("inputField" -> "n")))

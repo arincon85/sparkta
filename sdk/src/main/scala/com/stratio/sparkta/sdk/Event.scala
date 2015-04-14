@@ -17,11 +17,11 @@ package com.stratio.sparkta.sdk
 
 import java.io.{Serializable => JSerializable}
 
-case class Event(keyMap: Map[String, JSerializable]) {
+import org.apache.spark.sql.Row
 
-  if (keyMap == null) {
-    throw new NullPointerException("keyMap")
-  }
+case class Event(keyMap: Map[String, Array[Any]])  {
+
+  val keyRowMap=keyMap.map(x => x._1 -> Row (x._2 toArray))
 
   override def toString: String = {
     "[Event, Properties=" + keyMap + "]"

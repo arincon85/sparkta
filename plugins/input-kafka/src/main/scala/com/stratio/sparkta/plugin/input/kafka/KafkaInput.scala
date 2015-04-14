@@ -40,7 +40,7 @@ class KafkaInput(properties: Map[String, Serializable]) extends Input(properties
         properties.getString("groupId"),
         extractTopicsMap,
         storageLevel)
-        .map(data => new Event(Map(RAW_DATA_KEY -> data._2.getBytes("UTF-8").asInstanceOf[java.io.Serializable])))
+        .map(data => new Event(Map(RAW_DATA_KEY -> data._2.getBytes("UTF-8").toArray)))
 
     } else {
 
@@ -50,7 +50,7 @@ class KafkaInput(properties: Map[String, Serializable]) extends Input(properties
         kafkaParams,
         extractTopicsMap,
         storageLevel)
-        .map(data => new Event(Map(RAW_DATA_KEY -> data._2.getBytes("UTF-8").asInstanceOf[java.io.Serializable])))
+        .map(data => new Event(Map(RAW_DATA_KEY -> data._2.getBytes("UTF-8").toArray )))
 
     }
   }
