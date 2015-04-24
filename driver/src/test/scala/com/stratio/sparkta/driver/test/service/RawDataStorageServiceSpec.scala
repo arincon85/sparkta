@@ -36,7 +36,7 @@ import com.stratio.sparkta.sdk.Event
 class RawDataStorageServiceSpec extends WordSpecLike with BeforeAndAfterAll with Matchers {
 
   val WindowDuration: Long = 100
-  val SleepTime: Long = 800
+  val SleepTime: Long = 1000
   val ExpectedResult: Long = 2000
   val path = "testPath"
 
